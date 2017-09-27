@@ -35,14 +35,14 @@ class UUIDv1Test extends TestCase
      * lower = ((clock_seq_hi_variant << 8) | clock_seq_low) << 48 = 0x0000000000000000
      * lower |= mac = 0x0000ffffffffffff
      * lower &= ~(0xc000 << 48) = 0x0000ffffffffffff
-     * lower |= (~0x8000 << 48) = 0x7fffffffffffffff
+     * lower |= (0x8000 << 48) = 0x8000ffffffffffff
      *
-     * uuid = 13814000-1dd2-11b2-7fff-ffffffffffff
+     * uuid = 13814000-1dd2-11b2-8000-ffffffffffff
      */
     public function testUUIDv1atZeroTime()
     {
         $this->setActualTime(0);
         $uuid = new UUID();
-        $this->assertEquals('13814000-1dd2-11b2-7fff-ffffffffffff', $uuid->v1());
+        $this->assertEquals('13814000-1dd2-11b2-8000-ffffffffffff', $uuid->v1());
     }
 }

@@ -59,7 +59,7 @@ class UUID
         $lower = (($clock_seq_hi_variant << 8) | $clock_seq_low) << 48;
         $lower |= $mac;
         $lower &= ~(0xc000 << 48);
-        $lower |= (~0x8000 << 48);
+        $lower |= (0x8000 << 48);
 
         $uuid = strrev(substr(strrev(dechex($upper)), 0, 16)) . strrev(substr(strrev(dechex($lower)), 0, 16));
         $join = '-';
