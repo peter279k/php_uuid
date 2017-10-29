@@ -45,4 +45,30 @@ class UUIDv1Test extends TestCase
         $uuid = new UUID();
         $this->assertEquals('13814000-1dd2-11b2-8000-ffffffffffff', $uuid->v1());
     }
+
+    /**
+     * For this test time should contain special number at some position to get lead zeros in $time_low
+     */
+    public function testLeadZero() {
+        /*
+         * actual: 7736c0bc-f011-e7b6-c0ff-ffffffffff
+         * possible: 0077991c-bcf0-11e7-bafc-94e979ed5705
+         * date: Пн окт 30 00:27:44 MSK 2017
+         * microsec: 0.42512800 1509312464 
+         *
+         * nsec: 1509312464425128000
+         *
+         * $time = 0x01b21dd213814000 + 15093124644251280; = 137286052644251280 = 0x1e7bcf00079e690
+         * $time_low = $time & 0xffffffff; = 0x0079e690 <== bug here
+         * $time_mid = ($time >> 32) & 0xffff;
+         * $time_hi_version = ($time >> 48) & 0xfff;
+         * $upper = ($time_low << 32) | ($time_mid << 16) | $time_hi_version;
+         * $upper &= ~0x7000;
+         * $upper |= 1 << 12;
+         */
+
+        $this->setActualTime(1509312464425128000);
+        $uuid = new UUID();
+        $this->assertEquals(36, strlen($uuid->v1()));
+    }
 }
